@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// En primera, no manejo errores, lo cual deberia seria return NULL
-
 
 // Función para crear un nodo
 nodo_p* nuevo_nodo(void* elemento) {
@@ -17,6 +15,9 @@ nodo_p* nuevo_nodo(void* elemento) {
 //una dirección de memoria, de ahí porqué el puntero
 Pila* CrearPila() {
     Pila* nuevaPila = malloc(sizeof(Pila));
+    if (nuevaPila == NULL) {
+        return NULL;
+    }
     nuevaPila->cantidad = 0;
     nuevaPila->ultimo = NULL;
     return nuevaPila;
@@ -32,18 +33,14 @@ void Apilar(Pila* pila, void* elemento) {
 
 // Cuando no haya elemento, el ultimo en la pila va a ser NULL
 int EstaVacio(Pila* pila) {
-    if (pila->ultimo == NULL) {
-        return 1; // True
-    } else {
-        return 0; // False
-    }
+    return (pila->ultimo == NULL) ? 1 : 0;
 }
 
 // Desapilamos el elemento que hallamos guardado con un void*
 // El void* sirve como dato generico, asi que solo se maneja como un puntero sin importar qué tipo de dato tenga
 // Cuando retornamos un elemento, retornamos un puntero a ese elemento
 void* Desapilar(Pila* pila) {
-    if (EstaVacio(pila) == 1) {
+    if (EstaVacio(pila)) {
         return NULL; // Si esta vacio, no retorna nada, con eso solucionamos un problema
     }
     nodo_p* elementoDesapilado = pila->ultimo; //el elemento desapilado va a ser el nodo ultimo que Apilamos
@@ -76,30 +73,31 @@ int Cantidad(Pila* pila) {
     return pila->cantidad;
 }
 
-int main() {
 
-    // Se crea una variable con tipo de dato Pila*, es puntero porque la variable como tal no existe
-    // Es una inicializacion de una estructura en memoria
-    Pila* miPila = CrearPila();
-    int a = 1, b = 2, c = 3;
+// int main() {
 
-    // Siempre pasamos la pila como parametro con la dirección de memoria de las variables
-    // Pasamos la direccion de memoria de las variables, ya que en la función tenemos un void*
-    // Que es un puntero generico
-    Apilar(miPila, &a);
-    Apilar(miPila, &b);
-    Apilar(miPila, &c);
+//     // Se crea una variable con tipo de dato Pila*, es puntero porque la variable como tal no existe
+//     // Es una inicializacion de una estructura en memoria
+//     Pila* miPila = CrearPila();
+//     int a = 1, b = 2, c = 3;
+    
+//     // Siempre pasamos la pila como parametro con la dirección de memoria de las variables
+//     // Pasamos la direccion de memoria de las variables, ya que en la función tenemos un void*
+//     // Que es un puntero generico
+//     Apilar(miPila, &a);
+//     Apilar(miPila, &b);
+//     Apilar(miPila, &c);
 
-    // Desapilar retorna un puntero, así como pusimos ints, la funcion retorna un void* (generico)
-    // En ese caso el void* es int*, ya que es una pila de int*
-    // El (int*) es para despuntarlo y el puntero int* valorDesapilado tenga un valor
-    int* valorDesapilado = (int*) Desapilar(miPila);
-    printf("Desapilado: %i\n", *valorDesapilado); // Aca hacemos un *, porque apunta al valor, no a una direccion de memoria
+//     // Desapilar retorna un puntero, así como pusimos ints, la funcion retorna un void* (generico)
+//     // En ese caso el void* es int*, ya que es una pila de int*
+//     // El (int*) es para despuntarlo y el puntero int* valorDesapilado tenga un valor
+//     int* valorDesapilado = (int*) Desapilar(miPila);
+//     printf("Desapilado: %i\n", *valorDesapilado); // Aca hacemos un *, porque apunta al valor, no a una direccion de memoria
 
-    int* valor = (int*) VerTope(miPila);
-    printf("El último valor es: %i\n", *valor);
+//     int* valor = (int*) VerTope(miPila);
+//     printf("El último valor es: %i\n", *valor);
 
-    DestruirPila(miPila);
+//     DestruirPila(miPila);
 
-    return 0;
-}
+//     return 0;
+// }
